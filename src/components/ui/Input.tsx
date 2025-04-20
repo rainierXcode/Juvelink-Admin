@@ -1,5 +1,8 @@
+"use client"
 import { cn } from "@/lib/utils";
 import { forwardRef } from "react";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 const variantClasses = {
   default: "border border-gray-300/80 bg-white text-gray-900 focus:border-gray-500",
@@ -20,26 +23,46 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   className?: string;
   variant?: InputVariant;
   sizing?: InputSize;   
-  error?: string
+  error?: string,
+  name: string
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant = "default", sizing = "md",  error , ...props }, ref) => {
+  ({ className, variant = "default", sizing = "md", type = "text", error, name , ...props }, ref) => {
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const isPassword = type === "password";
+
     return (
-      <div className="relative">
-        <input
-          autoComplete="off"
-          ref={ref}
-          className={cn(
-              "rounded-md transition-all disabled:opacity-50 focus:outline-none w-full",
-              variantClasses[variant],
-              sizeClasses[sizing], 
-              className
-            )
-          }
-          {...props}
-        />
-        { error && ( <div className="font-light text-xs mt-1 ml-3 text-red-500">{error}</div> ) }
+      <div className="w-full">
+        <div className="relative">
+          <input
+            id={name}
+            name={name}
+            type={isPassword && showPassword ? "text" : type}
+            autoComplete="off"
+            ref={ref}
+            className={cn(
+                "rounded-md transition-all disabled:opacity-50 focus:outline-none w-full",
+                variantClasses[variant],
+                sizeClasses[sizing], 
+                className
+              )
+            }
+            {...props}
+          />
+
+          {isPassword && (
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute text-gray-500 cursor-pointer right-1.5 top-1/2 -translate-y-1/2 hover:text-gray-700 focus:outline-none"
+            tabIndex={-1}
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+          )}
+          </div>
+        { error && ( <div className="mt-1 ml-3 text-xs font-light text-red-500">{error}</div> ) }
       </div>
     );
   }

@@ -2,7 +2,8 @@ import { cn } from "@/lib/utils";
 
 const variantClasses = {
     default: 'bg-gray-600 text-white hover:bg-gray-700',
-    outline: 'border border-gray-300 text-gray-800 hover:bg-gray-100'
+    outline: 'border border-gray-300 text-gray-800 hover:bg-gray-100',
+    ghost: 'bg-transparent hover:bg-gray-200/70 text-black'
 } as const
 
 const sizeClasses = {
@@ -45,9 +46,9 @@ export default function Button({
         )} 
         
             {...props}>
-                {leftIcon && <span className="mr-2">{leftIcon}</span>}
+                {leftIcon && <span>{leftIcon}</span>}
                 {children}
-                {rightIcon && <span className="ml-2">{rightIcon}</span>}
+                {rightIcon && <span >{rightIcon}</span>}
         </button>
     )
 }

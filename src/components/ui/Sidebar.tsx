@@ -5,6 +5,7 @@ import { LayoutDashboard, SquareGanttChart, Container, User} from "lucide-react"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
+import { logout } from "@/action/logout_action";
 
 const items = [
     {
@@ -24,7 +25,7 @@ const items = [
     },
     {
       title: "Staff",
-      url: "#",
+      url: "staff_information",
       icon: User
     },
     
@@ -37,18 +38,18 @@ export default function Sidebar({
 
     return (
         <div className={cn(
-            "fixed left-0 top-0 h-screen w-72  text-white  z-50 p-4 border",
+            "fixed left-0 top-0 h-screen w-72  text-white  z-50 py-4 pl-4 border",
         )}>
-            <aside className="bg-indigo-900 drop-shadow-[0_2px_15px_rgba(46,49,145,0.5)] w-full h-full rounded-md px-6">
-                <header className="py-8  flex justify-center items-center gap-2">
-                    <Image src='logo.svg' alt="rrcy_logo" width={24} height={24} className="flex-1 w-auto h-auto"></Image>
-                    <div className="font-jost font-semibold">
-                        <div className="text-[10px]">AYALA MAGALANG PAMPANGA</div>
+            <aside className="bg-indigo-900 drop-shadow-[0_2px_13px_rgba(46,49,145,0.4)] w-full h-full rounded-md px-6">
+                <header className="flex items-center justify-center py-8 gap-x-2">
+                    <Image src='logo.svg' alt="rrcy_logo" width={32} height={32} ></Image>
+                    <div className="font-semibold font-jost">
+                        <div className="text-[11px]">AYALA MAGALANG PAMPANGA</div>
                         <div className="text-[7px]">REGIONAL REHABILITATION CENTER FOR YOUTH</div>
                     </div>
                 </header>  
 
-                <section className="py-4 flex flex-col gap-4 ">
+                <section className="flex flex-col gap-4 py-4 ">
                    {
                     items.map((item, index) => (
                         <Link href={item.url} key={index}>
@@ -70,6 +71,10 @@ export default function Sidebar({
                         </Link>    
                     ))
                    }
+                </section>
+
+                <section>
+                   <div onClick={logout}>Log out</div>
                 </section> 
             </aside>
         </div>

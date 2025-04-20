@@ -1,14 +1,20 @@
 import Image from "next/image"
 
-export default function Header(){
+type HeaderProps = {
+    title: string,
+    description: string
+}
+
+export default function Header( {title, description} : HeaderProps ){
     return (
-        <header className="px-8 py-4 bg-white flex justify-center items-center gap-2">
-            <Image src='logo.svg' alt="rrcy_logo" width={32} height={32} ></Image>
-            <div className="font-jost font-semibold uppercase">
-                <div className="text-sm">AYALA MAGALANG PAMPANGA</div>
-                <div className="text-xs">REGIONAL REHABILITATION CENTER FOR YOUTH</div>
+         <div className="flex items-center justify-between px-4 py-4 rounded-md shadow-md">
+            <div>
+                <div className="text-xs text-neutral-900/60">{description}</div>
+                <div className="text-[#000359] font-semibold text-lg mt-1">{title}</div>
             </div>
-        </header>
+            <Image src="logo.svg" alt="rrcy_logo" width={32} height={32}/>
+        </div>
+        
     )
 }
 

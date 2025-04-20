@@ -41,12 +41,12 @@
             onClick={handleChange}
             className={cn(
                 "rounded border border-gray-300 flex items-center justify-center transition-colors cursor-pointer box-border ease-in-out",
-                checked ? "bg-black border-black text-white" : "bg-white",
+                checked ? "bg-black  text-white" : "bg-white",
                 variant === 'circle' && 'rounded-full',
                 size === "xs" && "w-3.5 h-3.5 p-0.5", 
-                size === "sm" && "w-6 h-6 p-1", 
-                size === "md" && "w-8 h-8 p-1.5", 
-                size === "lg" && "w-10 h-10 p-2"
+                size === "sm" && "w-4 h-4 p-0.5", 
+                size === "md" && "w-6 h-6 p-1", 
+                size === "lg" && "w-8 h-8 p-1.5"
             )}
             >
                  {checked && <Check className="text-white size-full" />}

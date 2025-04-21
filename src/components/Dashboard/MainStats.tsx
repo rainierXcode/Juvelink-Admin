@@ -2,7 +2,7 @@ import { User } from "lucide-react";
 
 export default function MainStats() {
     return (
-        <div className="col-span-6 p-3">
+        <div className="col-span-5 p-3">
             <div className="mb-4 text-sm font-semibold">Case Summary</div>
             <div className="grid grid-cols-12 gap-3">
                 <StatCard
@@ -59,7 +59,7 @@ function StatCard({ bg, iconColor, icon, count, title }: StatCardProps) {
                 {icon}
             </div>
             <div className="text-sm font-semibold">{count}</div>
-            <div className="mb-4 text-xs font-medium">{title}</div>
+            <div className="text-xs font-medium">{title}</div>
         </div>
     );
 }

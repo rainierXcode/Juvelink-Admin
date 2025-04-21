@@ -1,10 +1,13 @@
 import { getUser } from "@/data/users";
 import Header from "@/components/layouts/Header";
-import Grid from "@/app/(main)/Grid";
-import MainStats from "@/app/(main)/MainStats";
+import Grid from "@/components/Dashboard/Grid";
+import MainStats from "@/components/Dashboard/MainStats";
 import { redirect } from "next/navigation";
 import { canView } from "@/lib/permissions";
-import CasePie from "./CasePie";
+import CasePie from "../../components/Dashboard/CasePie";
+import AgeDistribution from "@/components/Dashboard/AgeDistribution";
+import MonthlyNewAdmission from "@/components/Dashboard/MonthlyNewAdmission";
+import MonthlyVisitors from "@/components/Dashboard/MontlyVisitors";
 
 export default async function DashboardPage() {
     const user = await getUser();
@@ -21,14 +24,21 @@ export default async function DashboardPage() {
         <div className="px-8 pt-4 font-poppins">
             <Header title="Dashboard" description={`Hello ${user?.name}, Welcome back`} />
 
-            <Grid>
+            <Grid className="grid-cols-11">
                 <MainStats />
-                <Grid className="col-span-6 p-0">
-                    <div className="w-full col-span-6 flex justify-center items-center px-1.5 py-3">
-                        <CasePie />
-                    </div>
-                    <div className="col-span-6">d</div>
-                </Grid>
+                <CasePie />
+                <AgeDistribution />
+            </Grid>
+
+            <Grid className="grid-cols-11 h-[240px]">
+                <MonthlyNewAdmission />
+                <MonthlyVisitors />
+            </Grid>
+
+            <Grid>
+                <div className="col-span-12 h-[200px]">
+                    Hello
+                </div>
             </Grid>
         </div>
     );

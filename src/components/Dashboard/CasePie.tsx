@@ -33,11 +33,11 @@ export default function CasePie(){
             radius: "50%",
             center: ["50%", "60%"],
             data: [
-              { value: 1048, name: "Search Engine" },
-              { value: 735, name: "Direct" },
-              { value: 580, name: "Email" },
-              { value: 484, name: "Union Ads" },
-              { value: 300, name: "Video Ads" },
+              { value: 120, name: 'Others' },
+              { value: 300, name: 'Robbery' },
+              { value: 250, name: 'Assault' },
+              { value: 200, name: 'Burglary' },
+              { value: 310, name: 'Drugs' }
             ],
             emphasis: {
               itemStyle: {
@@ -62,5 +62,5 @@ export default function CasePie(){
       };
     }, []);
   
-    return <div ref={chartRef} style={{ width: "100%", height: "100%" }} />;
+    return <div ref={chartRef} style={{ width: "100%", height: "100%" }} className="col-span-3 px-0.5 py-3"/>;
 }

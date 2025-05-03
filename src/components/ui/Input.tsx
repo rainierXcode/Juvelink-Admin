@@ -11,8 +11,9 @@ const variantClasses = {
 } as const;
 
 const sizeClasses = {
+  xs: "px-2 py-0.5 text-xs",
   sm: "px-3 py-1 text-sm",
-  md: "px-4 py-1.5 text-base",
+  md: "px-4 py-1.5 text-sm",
   lg: "px-5 py-3 text-lg",
 } as const;
 
@@ -24,7 +25,6 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   variant?: InputVariant;
   sizing?: InputSize;   
   error?: string,
-  name: string
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -33,7 +33,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const isPassword = type === "password";
 
     return (
-      <div className="w-full">
+      <div className="flex-1" >
         <div className="relative">
           <input
             id={name}

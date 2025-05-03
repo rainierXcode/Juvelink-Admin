@@ -7,7 +7,9 @@ export const loginSchema = z.object({
     }).min(5, "Access ID must be at least 5 characters long")
       .max(20, "Access ID must be at most 20 characters long")
       .regex(/^[a-zA-Z]+-[a-zA-Z]+-\d+$/, "Invalid Access ID'"),
-    password: z.string().min(6, "Password must be at least 6 characters long")
+    password: z.string({
+      required_error: "Password is required",
+    }).min(6, "Password must be at least 6 characters long")
 })
 
 export type LoginInput = z.infer<typeof loginSchema>

@@ -32,7 +32,7 @@ export default function MainStats() {
                     bg="#F2E0FF"
                     iconColor="#C26DFF  "
                     count={1}
-                    title="Resolve Cases"
+                    title="New Admission"
                     icon={<User className="w-full h-full text-white" />}
                 />
             </div>
@@ -59,7 +59,15 @@ function StatCard({ bg, iconColor, icon, count, title }: StatCardProps) {
                 {icon}
             </div>
             <div className="text-sm font-semibold">{count}</div>
-            <div className="text-xs font-medium">{title}</div>
+            <div className="text-xs font-medium">
+                {
+                    title.split(' ').map((text, index) => (
+                        <div key={index}>
+                            {text}
+                        </div>
+                    ))
+                }
+            </div>
         </div>
     );
 }

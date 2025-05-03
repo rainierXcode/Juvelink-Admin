@@ -21,8 +21,6 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
     className?:string;
     variant?: InputVariant;
     size?: InputSize;
-    leftIcon?: React.ReactNode;
-    rightIcon?: React.ReactNode;
 }
 
 
@@ -30,8 +28,6 @@ export default function Button({
     className, 
     variant = 'default',
     size = 'md',
-    leftIcon, 
-    rightIcon, 
     children ,
     ...props
 
@@ -46,9 +42,7 @@ export default function Button({
         )} 
         
             {...props}>
-                {leftIcon && <span>{leftIcon}</span>}
                 {children}
-                {rightIcon && <span >{rightIcon}</span>}
         </button>
     )
 }

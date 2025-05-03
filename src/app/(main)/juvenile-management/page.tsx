@@ -1,10 +1,12 @@
 "use client"
 import { Input } from "@/components/ui/Input";
-import { Search, CloudDownload } from "lucide-react";
+import { Search, CloudDownload,EllipsisVertical, Trash2, BookOpenText, PencilRuler } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Pagination from "@/components/ui/Pagination";
 import { Checkbox } from "@/components/ui/Checkbox";
 import Header from "@/components/layouts/Header";
+import { DropdownMenu, DropdownTrigger, DropdownContent } from "@/components/ui/Dropdown";
+import Link from "next/link";
 
 const juveniles = [
     {
@@ -71,7 +73,8 @@ export default function JuvenileManagement() {
                 <Input name="search" sizing="sm" className="flex-1 p-0 text-sm border-0 peer" placeholder="Search..."/>
             </div>
 
-            <Button leftIcon={<CloudDownload size={16}/>} size="sm" className="text-xs py-1.5 bg-emerald-600 hover:bg-emerald-700">
+            <Button  size="sm" className="text-xs py-1.5 bg-emerald-600 hover:bg-emerald-700 gap-1.5">
+                <CloudDownload size={16}/>
                 Export to excel
             </Button>
         </div>
@@ -90,6 +93,7 @@ export default function JuvenileManagement() {
                         <th>Custody Duration</th>
                         <th>Next Trial Date</th>
                         <th>Status</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody className="text-xs [&>tr>td]:px-1.5 [&>tr>td]:py-2 [&>tr]:font-medium [&>tr]:hover:bg-gray-100">
@@ -104,6 +108,38 @@ export default function JuvenileManagement() {
                                 <td> {juvenile.custody_duration} </td>
                                 <td className="text-blue-500"> {juvenile.next_trial} </td>
                                 <td className="text-red-500"> {juvenile.status} </td>
+                                <td className="w-4 box-border p-0">
+                                  <DropdownMenu>
+                                      <DropdownTrigger>
+                                        <Button size="sm" variant="ghost" className="flex justify-center p-0.5 text-neutral-900/50">
+                                          <EllipsisVertical size={16} />
+                                        </Button>
+                                      </DropdownTrigger>
+
+                                      <DropdownContent className="border-[#5C7199]/30 right-2 top-full w-24 divide-y divide-white/60 ">
+                                          <Link href={`/juvenile-management/edit/${juvenile.id}`}>
+                                            <Button variant="ghost" size="sm" className="gap-2 text-xs w-full justify-start py-1.5">
+                                                <PencilRuler size={14}/>
+                                                Edit
+                                            </Button>
+                                          </Link>
+
+                                          <Link href={'/delete'}>
+                                            <Button variant="ghost" size="sm" className="gap-2 text-xs w-full justify-start py-1.5">
+                                                <Trash2 size={14}/>
+                                                Delete
+                                            </Button>
+                                          </Link>
+
+                                          <Link href={`/juvenile-management/details/${juvenile.id}`}>
+                                            <Button variant="ghost" size="sm" className="gap-2 text-xs w-full justify-start py-1.5">
+                                                <BookOpenText size={14}/>
+                                                Details
+                                            </Button>
+                                          </Link>
+                                      </DropdownContent>
+                                  </DropdownMenu>
+                                </td>
                             </tr>
                         ))
                     }

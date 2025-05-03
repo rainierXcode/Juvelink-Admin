@@ -67,12 +67,10 @@ export default function MonthlyNewAdmission(){
               },
             
               itemStyle: {
-                normal: {
                   color: function(params : { dataIndex: number }) {
                     const colors = ['#e76e51', '#2a9d90', '#274754', '#f3a462'];
                       return colors[params.dataIndex % colors.length];
                   }
-                }
               }
             }
           ]

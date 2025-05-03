@@ -44,11 +44,13 @@ export default function Inventory() {
       <Header title="Inventory Management" description="Manage here your supplies" />
 
       <div className="flex items-center justify-end mt-6 gap-4">
-          <Button leftIcon={<CloudDownload size={16}/>} size="sm" className="text-xs py-1.5 bg-emerald-600 hover:bg-emerald-700">
+          <Button  size="sm" className="text-xs py-1.5 bg-emerald-600 hover:bg-emerald-700 gap-1.5">
+            <CloudDownload size={16}/>
               Export to excel
           </Button>
 
-          <Button leftIcon={<Plus size={16}/>} size="sm" className="text-xs py-1.5 bg-black hover:bg-black/70">
+          <Button  size="sm" className="text-xs py-1.5 bg-black hover:bg-black/70 gap-1.5">
+             <Plus size={16}/>
               Add new product
           </Button>
       </div>
@@ -74,7 +76,7 @@ export default function Inventory() {
                                 <td>{ product.product_quantity }</td>
                                 <td className="text-red-500"> {product.product_quantity} </td>
                                 <td className="w-4 box-border p-0">
-                                  <Button size="sm" variant="ghost" className="flex justify-center p-0.5"  leftIcon={ <Ellipsis size={16} /> }/>
+                                  <Button size="sm" variant="ghost" className="flex justify-center p-0.5"><Ellipsis size={16} /></Button>
                                 </td>
                             </tr>
                         ))

@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/Input"
 import Button from "@/components/ui/Button"
 import { useForm } from "react-hook-form"
-import { loginSchema, LoginInput } from "@/schemas/auth.schema"
+import { signInSchema, SigninInput } from "@/schemas/auth.schema"
 import { zodResolver } from '@hookform/resolvers/zod'
 import  axiosInstance  from '@/lib/axios'
 import { useState } from "react"
@@ -12,31 +12,26 @@ import { useRouter } from 'next/navigation';
 import { TriangleAlert } from "lucide-react"
 
 export default function LoginForm(){
-    const [haveErrorNotice, setHaveErrorNotice] = useState< string >('');
+    const [errorNotice, setErrorNotice] = useState<string >('');
     const router = useRouter();
-
 
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting }
-    } = useForm<LoginInput>({
-        resolver: zodResolver(loginSchema),
+    } = useForm<SigninInput>({
+        resolver: zodResolver(signInSchema),
     })
 
-    const onSubmit = async ( data: LoginInput) =>{
+    const onSubmit = async ( data: SigninInput) =>{
         
         try{
-            const response  = await axiosInstance.post('/auth/admin/login', data);
-            const  result  = response.data
-            
-            if (!result.success) {
-                throw new Error('Login failed: Invalid credentials'); 
-            }
-            setHaveErrorNotice('')
+            await axiosInstance.post('/auth/admin/login', data);
+        
+            setErrorNotice('')
             router.push('/');
         }catch(error: unknown){
-            setHaveErrorNotice(typeof error === 'string' ? error : 'Unknown error');
+            setErrorNotice(typeof error === 'string' ? error : 'Unknown error');
         }
     }
 
@@ -52,10 +47,10 @@ export default function LoginForm(){
             <div className="mb-8 text-2xl font-bold relative">
             
                 Sign In
-                { haveErrorNotice && 
+                { errorNotice && 
                 <div className="text-xs font-normal absolute -bottom-5 text-red-400 flex items-center gap-1">
                     <TriangleAlert size={12} />
-                    { haveErrorNotice }
+                    { errorNotice }
                 </div> }
             </div>
             <div className="space-y-4">

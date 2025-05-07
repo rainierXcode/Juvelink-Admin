@@ -1,105 +1,141 @@
 "use client"
-import { useState } from "react"
-import { Input } from "@/components/ui/Input"
-import { DropdownMenu, DropdownContent, DropdownTrigger } from "@/components/ui/Dropdown"
-import Stepper from "@/components/ui/Stepper"
-import Button from "@/components/ui/Button"
-import { ChevronRight, ChevronLeft } from "lucide-react"
+import { Plus, Ellipsis } from "lucide-react";
+import Button from "@/components/ui/Button";
+import Pagination from "@/components/ui/Pagination";
+import Header from "@/components/layouts/Header";
+import CreateUserModal from "./create_user";
+import { AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
-export default function UserManagement(){
-     const [currentStep, setCurrentStep] = useState<number>(1);
+import axiosInstance from "@/lib/axios";
+import { useQuery, keepPreviousData } from "@tanstack/react-query"
+import { ColumnDef, useReactTable, getCoreRowModel, getPaginationRowModel, flexRender } from '@tanstack/react-table'
+
+type User = {
+  user_id: number;
+  email: string,
+  access_id: string,
+  first_name: string
+  last_name: string,
+  created_at: string,
+  role: string
+}
+
+type ApiResponse = { users: User[]; total: number };
+
+const fetchUsers = async (page: number, pageSize: number) : Promise< ApiResponse > => {
+  const response = await axiosInstance.get('/users/getAll', {
+    params: { page, limit: pageSize }
+  })
+
+  return { users: response.data.data, total: 2 };
+}
+
+const useUsersQuery = (page: number, pageSize: number) => {
+  return useQuery({
+    queryKey: ['users', page, pageSize],
+    queryFn: () => fetchUsers(page, pageSize),
+    placeholderData: keepPreviousData
+  })
+}
+
+export default function UserManagement() {
+    const { page } = Object.fromEntries(useSearchParams())
+
+    const currentPage = page ? parseInt(page, 10) : 1
+
+    const { data, isLoading, error } = useUsersQuery(currentPage, 10)
+
+    const [isOpenCreateUser, setIsOpenCreateUser] = useState<boolean>(false);
+
+
+    const columns: ColumnDef<User>[] = [
+      { header: "First Name", accessorKey: "first_name"},
+      { header: "Last Name", accessorKey: "last_name"},
+      { header: "Access",  accessorFn: (row) => row.access_id ?? row.email },
+      { header: "Role", accessorKey: "role"},
+      { header: "Created At", accessorKey: "created_at"},
+    ]
+
+    const pageSize = 10;
     
-    const steps = ['General Information', 'Security', 'Overview']
+    const table = useReactTable({
+      data: data?.users || [], 
+      columns,
+      getCoreRowModel: getCoreRowModel(),
+      getPaginationRowModel: getPaginationRowModel(),
+      manualPagination: true,
+      pageCount: Math.ceil((data?.total || 0) / pageSize), 
+      state: { pagination: { pageIndex: currentPage - 1, pageSize } }, 
+    });
 
-    const prevStep = () => {
-        setCurrentStep((prev) => prev - 1)
-    }
+    if(isLoading) return <div>Loading...</div>
 
+    if(error) return <div>Error...</div>
 
-    const nextStep = () => {
-        setCurrentStep((prev) => prev + 1)
-    }
-
-  
-    const stepDetails = () => {
-        switch (currentStep) {
-            case 1:
-                return <GeneralInformation />  
-
-            case 2:
-                return <Security />  
-
-            case 3: 
-                return <Overview />
-
-            default:
-                break;
-        }
-    }
-
-
+    
     return (
-        <div className="flex flex-col min-h-screen px-8 py-4 font-poppins">
-            <div className="font-semibold text-lg">Create User</div>
+    <>
+        <AnimatePresence>
+            {
+                isOpenCreateUser && (
+                    <CreateUserModal onClose={() => setIsOpenCreateUser(false)}/>
+                )
+            }
+        </AnimatePresence>
+        <div className="flex flex-col min-h-screen px-8 pt-4 font-poppins">
+        <Header title="User Management" description="Manage here your users" />
 
-            <div className="border border-[#5C7199]/40 rounded-md px-32  box-border mt-8 py-4 flex items-center">
-                <Stepper currentStep={currentStep} steps={steps}/>
-            </div>
-
-        
-          
-            <div className="border border-[#5C7199]/40 rounded-md box-border px-4 py-4 mt-8 flex-col flex flex-1">
-                {
-                    stepDetails()
-                }
-                <div className="flex-1 flex items-end justify-end gap-4">
-                    <Button size="sm" className=" gap-1" onClick={prevStep}>
-                        <ChevronLeft size={16}/>
-                        Next
-                    </Button>
-                    <Button size="sm" className="bg-[#2E3191] hover:bg-blue-700 gap-1" onClick={nextStep}>
-                        Next
-                        <ChevronRight size={16}/>
-                    </Button>
-                </div>
-            </div>
-
-               
-          
-
+        <div className="flex items-center justify-end mt-6 gap-4">
+            <Button onClick={() => setIsOpenCreateUser(true)} size="sm" className="text-xs py-1.5 bg-black hover:bg-black/70">
+                <Plus size={16}/>
+                Add user
+            </Button>
         </div>
-    )
-}
 
-function GeneralInformation(){
-    return (
-        <div className="space-y-4 flex flex-col w-full">
-            <Input sizing='md' name="first_name" placeholder="First Name" className=""/>
-            <Input sizing='md' name="middle_name" placeholder="Middle Name" className=""/>
-            <Input sizing='md' name="last_name" placeholder="Last Name" className=""/>
-            <DropdownMenu>
-                <DropdownTrigger>
-                    <div className="border font-poppins border-gray-300/80 rounded-sm font-normal py-0.5 text-gray-400 px-4">Role</div>
-                </DropdownTrigger>
+        <div className="flex-1 border-b border-b-neutral-900/10">
+            <div className="mt-6 overflow-x-auto">
+                <table className="w-full overflow-hidden font-normal">
+                    <thead >
+                        {table.getHeaderGroups().map((headerGroup) => (
+                          <tr key={headerGroup.id} className="bg-gray-100 [&>th]:font-normal [&>th]:p-1.5 [&>th]:px-8 text-[13px] text-left">
+                            {headerGroup.headers.map((header) => (
+                              <th key={header.id}>
+                                  {
+                                    flexRender(
+                                      header.column.columnDef.header,
+                                      header.getContext()
+                                    )
+                                  }
+                              </th>
+                            ))}
+                          </tr>
+                        ))}
+                    </thead>
+                    <tbody className="text-xs  [&>tr>td]:py-2 [&>tr>td]:px-8 [&>tr]:font-medium [&>tr]:hover:bg-gray-100">
+                    {table.getRowModel().rows.map((row) => (
+                      <tr key={row.id}>
+                        {row.getVisibleCells().map((cell) => (
+                          <td key={cell.id}>
+                             {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+        
+                    </tbody>
+                </table>
 
-                <DropdownContent variant="pop" className="w-full border-gray-300/80 [&>div]:cursor-pointer [&>div]:hover:bg-gray-100">
-                    <div className="px-4 py-1 text-sm text-neutral-900/85">Admin</div>
-                    <div className="px-4 py-1 text-sm text-neutral-900/85">Social Worker</div>
-                    <div className="px-4 py-1 text-sm text-neutral-900/85">Parents</div>
-                </DropdownContent>
-            </DropdownMenu>
-        </div>  
-    )
-}
+            </div>
+        </div>
 
-function Security(){
-    return (
-        <div></div>
-    )
-}
-
-function Overview(){
-    return (
-        <div></div>
-    )
+        <Pagination className="font-poppins p-2.5 [&>button]:py-1.5 [&>button]:outline-0 [&>button]:font-normal"/>
+        
+        </div>
+    </>
+    );
 }

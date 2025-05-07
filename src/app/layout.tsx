@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Jost, Poppins, Geist  } from "next/font/google";
 import "./globals.css";
+import Providers from "./providers";
 
 const jost = Jost({
   variable: '--font-jost',
@@ -35,7 +36,9 @@ export default function RootLayout({
       <body
         className={`${jost.variable} ${poppins.variable} ${geist.variable} antialiased`}
       >
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

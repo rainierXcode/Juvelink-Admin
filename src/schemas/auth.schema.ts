@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const loginSchema = z.object({
+export const signInSchema = z.object({
     access_id: z.string({
         required_error: "Access ID is required",
         invalid_type_error: "Access ID must be a string",
@@ -12,4 +12,4 @@ export const loginSchema = z.object({
     }).min(6, "Password must be at least 6 characters long")
 })
 
-export type LoginInput = z.infer<typeof loginSchema>
+export type SigninInput = z.infer<typeof signInSchema>
